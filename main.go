@@ -28,13 +28,13 @@ func main() {
 }
 
 func nextSlide() error {
-	cmd := exec.Command("xdotool", "search", "Slides", "windowactivate", "--sync", "key", "--clearmodifiers", "Down")
+	cmd := exec.Command("xdotool", "search", "Google Slides", "windowactivate", "--sync", "key", "--clearmodifiers", "Down")
 	err := cmd.Run()
 	return err
 }
 
 func prevSlide() error {
-	cmd := exec.Command("xdotool", "search", "Slides", "windowactivate", "--sync", "key", "--clearmodifiers", "Up")
+	cmd := exec.Command("xdotool", "search", "Google Slides", "windowactivate", "--sync", "key", "--clearmodifiers", "Up")
 	err := cmd.Run()
 	return err
 }

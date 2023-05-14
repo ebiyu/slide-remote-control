@@ -8,19 +8,22 @@
         * {
             font-family: sans-serif;
         }
-        html, body {
+        html,
+        body {
             margin: 0;
             padding: 0;
         }
+
         .btn {
             display: flex;
             justify-content: center;
             align-items: center;
-            width: 100%;
-            text-decoration: none;
+            width: 100%; text-decoration: none;
             color: white;
             font-size: 80px;
+            border: none;
         }
+
         .btn-prev {
             background-color: #999;
             height: 100px;
@@ -31,6 +34,13 @@
             background-color: #696;
             height: 300px;
         }
+
+        #timerLabel {
+            font-size: 80px;
+            text-align: center;
+            margin: 10px 0;
+        }
+
     </style>
     <meta name="viewport" content="width=device-width,initial-scale=1">
 </head>
@@ -42,6 +52,23 @@
     <a class="btn btn-next" href="/next/">
         <span>Next</span>
     </a>
+    <div id="timerLabel">0:00</div>
+    <button class="btn btn-prev" id="resetButton">
+        <span>Reset</span>
+    </button>
+    <script>
+        let startedAt = new Date();
+        window.onload = () => {
+            const timerLabel = document.getElementById('timerLabel');
+            setInterval(() => {
+                const ms = (new Date()).getTime() - startedAt.getTime();
+                timerLabel.innerHTML = (ms / 60000).toFixed(0) + ":" + ("0" + (ms / 1000).toFixed(0)).slice(-3);
+            }, 100);
+        }
+        document.getElementById('resetButton').onclick = () => {
+            startedAt = new Date();
+        }
+    </script>
 </body>
 
 </html>

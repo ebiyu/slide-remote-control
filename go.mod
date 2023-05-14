@@ -1,4 +1,4 @@
-module ebiyuu1121/slide-control
+module ebiyuu1121/slide-remote-control
 
 go 1.20
 

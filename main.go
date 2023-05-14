@@ -97,7 +97,6 @@ func getNgrokAuthToken() (string, error) {
 
 	type conf struct {
 		AuthToken string `yaml:"authtoken"`
-		Version   string `yaml:"version"`
 	}
 
 	c := conf{}

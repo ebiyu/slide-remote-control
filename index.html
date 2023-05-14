@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Slide Control</title>
+    <style>
+        * {
+            font-family: sans-serif;
+        }
+        html, body {
+            margin: 0;
+            padding: 0;
+        }
+        .btn {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            text-decoration: none;
+            border: black solid 1px;
+            color: white;
+            font-size: 80px;
+        }
+        .btn-prev {
+            background-color: #ff0000;
+            height: 100px;
+            margin-bottom: 10px;
+        }
+
+        .btn-next {
+            background-color: #0000ff;
+            height: 300px;
+        }
+    </style>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+</head>
+
+<body>
+    <a class="btn btn-prev" href="/prev/">
+        <span>Prev</span>
+    </a>
+    <a class="btn btn-next" href="/next/">
+        <span>Next</span>
+    </a>
+</body>
+
+</html>

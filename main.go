@@ -4,22 +4,34 @@ import (
 	"log"
 	"net/http"
 	"os/exec"
+    _ "embed"
 )
+
+//go:embed index.html
+var indexHTML string
 
 func main() {
 	// define handlers
-	handleNext := func(w http.ResponseWriter, _ *http.Request) {
+	handleNext := func(w http.ResponseWriter, r *http.Request) {
 		if err := nextSlide(); err != nil {
-			log.Fatal(err)
+			log.Println(err)
 		}
+
+        // redirect
+        http.Redirect(w, r , "/", http.StatusSeeOther)
 	}
-	handlePrevious := func(w http.ResponseWriter, _ *http.Request) {
+	handlePrevious := func(w http.ResponseWriter, r *http.Request) {
 		if err := prevSlide(); err != nil {
-			log.Fatal(err)
+			log.Println(err)
 		}
+        http.Redirect(w, r , "/", http.StatusSeeOther)
 	}
+    handleIndex := func(w http.ResponseWriter, _ *http.Request) {
+        w.Write([]byte(indexHTML))
+    }
 
 	// define routes
+	http.HandleFunc("/", handleIndex)
 	http.HandleFunc("/next/", handleNext)
 	http.HandleFunc("/prev/", handlePrevious)
 

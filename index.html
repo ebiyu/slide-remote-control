@@ -62,7 +62,7 @@
             const timerLabel = document.getElementById('timerLabel');
             setInterval(() => {
                 const ms = (new Date()).getTime() - startedAt.getTime();
-                timerLabel.innerHTML = (ms / 60000).toFixed(0) + ":" + ("0" + (ms / 1000).toFixed(0)).slice(-3);
+                timerLabel.innerHTML = (ms / 60000).toFixed(0) + ":" + ("0" + (ms / 1000).toFixed(0)).slice(-2);
             }, 100);
         }
         document.getElementById('resetButton').onclick = () => {

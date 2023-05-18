@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	_ "embed"
+	"errors"
 	"flag"
 	"fmt"
 	"io/ioutil"
@@ -10,6 +11,7 @@ import (
 	"net/http"
 	"os"
 	"os/exec"
+	"strings"
 
 	"gopkg.in/yaml.v2"
 
@@ -28,6 +30,8 @@ func main() {
 	handleNext := func(w http.ResponseWriter, r *http.Request) {
 		if err := nextSlide(); err != nil {
 			log.Println(err)
+		} else {
+			log.Println("Next slide")
 		}
 
 		// redirect
@@ -36,6 +40,8 @@ func main() {
 	handlePrevious := func(w http.ResponseWriter, r *http.Request) {
 		if err := prevSlide(); err != nil {
 			log.Println(err)
+		} else {
+			log.Println("Previous slide")
 		}
 		http.Redirect(w, r, "/", http.StatusSeeOther)
 	}
@@ -66,19 +72,48 @@ func main() {
 		log.Fatal(http.Serve(tun, nil))
 	} else {
 		fmt.Println("Listening on http://localhost:8080")
+		findGoogleSlidesWindow()
 		log.Fatal(http.ListenAndServe(":8080", nil))
 	}
 }
 
+func findGoogleSlidesWindow() (string, error) {
+	pidsOutput, err := exec.Command("xdotool", "search", "--name", "Google Slides").Output()
+	if err != nil {
+		return "", err
+	}
+	pids := strings.Split(string(pidsOutput), "\n")
+	for _, pid := range pids {
+		name, err := exec.Command("xdotool", "getwindowname", pid).Output()
+		if err != nil {
+			return "", err
+		}
+		// avoid presenter view
+		if strings.Contains(string(name), "Google Slides") && !strings.Contains(string(name), "Presenter view") {
+			return pid, nil
+		}
+	}
+	return "", errors.New("Could not find Google Slides window")
+}
+
+func sendKeyToGoogleSlides(key string) error {
+	pid, err := findGoogleSlidesWindow()
+	if err != nil {
+		return err
+	}
+
+	cmd := exec.Command("xdotool", "windowactivate", "--sync", pid, "key", "--clearmodifiers", key)
+	err = cmd.Run()
+	return err
+}
+
 func nextSlide() error {
-	cmd := exec.Command("xdotool", "search", "Google Slides", "windowactivate", "--sync", "key", "--clearmodifiers", "Down")
-	err := cmd.Run()
+	err := sendKeyToGoogleSlides("Down")
 	return err
 }
 
 func prevSlide() error {
-	cmd := exec.Command("xdotool", "search", "Google Slides", "windowactivate", "--sync", "key", "--clearmodifiers", "Up")
-	err := cmd.Run()
+	err := sendKeyToGoogleSlides("Up")
 	return err
 }
 
